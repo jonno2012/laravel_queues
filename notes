@@ -1,0 +1,8 @@
+- To use default db for queue run:
+php artisan queue:table
+php artisan migrate
+QUEUE_CONNECTION=database
+
+We must start the worker:
+php artisan queue:work
+* it will now scan the db to look for jobs and will start processing them.
