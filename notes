@@ -6,3 +6,11 @@ QUEUE_CONNECTION=database
 We must start the worker:
 php artisan queue:work (run from inside laradock)
 * it will now scan the db to look for jobs and will start processing them.
+* a worker will execute jobs one by one which can take a long time. However we can run multiple queues at tthe same time. Queues can be given
+priority and specific job types can be assigned to a specific queue:
+- php artisan queue:work --queue=payments,default (payments has priority because it is first)
+- \App\Jobs\ProcessPayment::dispatch()->onQueue('payments');
+
+- $timeout can be used to ensure jobs don't hang if, for wxample, a third party api is unresponsive
+- use retryUntil for a time based retry. it will retry repeatedly until time expires.
+- $backoff = 2 - waits for 2 secs between each retry
