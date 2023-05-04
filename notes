@@ -4,5 +4,5 @@ php artisan migrate
 QUEUE_CONNECTION=database
 
 We must start the worker:
-php artisan queue:work
+php artisan queue:work (run from inside laradock)
 * it will now scan the db to look for jobs and will start processing them.
