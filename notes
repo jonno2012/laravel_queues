@@ -21,3 +21,11 @@ the number of $tries will determine how many release() retries are allowed.
 * laravel counts an attempt as a retry whether the job was retried as a result of a release() or an exception. we can tell laravel
 to count them separately by using the $maxExceptions prop.
 * the failed() ethod is run when a job failed.
+
+* job workflows are sequential jobs where subsequent jobs will not execute until the previous one has completed
+* batches are non-sequetial batches:
+- php artisan queue:batches-table (then migrate)
+- add Batchable trait to the job classes
+
+* if a batch job is failed the rest of the jobs in the batch will be cancelled. to stop this behaviour we can use the
+allowFailures() method

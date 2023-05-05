@@ -10,7 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class ProcessPayment implements ShouldQueue
+class PullRepo implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Batchable;
 
@@ -27,6 +27,17 @@ class ProcessPayment implements ShouldQueue
      */
     public function handle(): void
     {
-        //
+        // when job inside batch fails the whole batch will be marked as cancelled. to ensure the job doesn't run
+        // if the job was cancelled we need to add the following check:
+        if($this->batch()->canceled()) {
+            return;
+        }
+
+        sleep(2);
+    }
+
+    public function failed(\Throwable $excepttion)
+    {
+//        Log::log(1, $excepttion->getMessage());
     }
 }

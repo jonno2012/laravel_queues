@@ -13,16 +13,37 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//Route::get('/', function () {
+////    (new \App\Jobs\SendWelcomeEmail())->handle();
+//
+//    \App\Jobs\SendWelcomeEmail::dispatch()->delay(5);
+////    for($i=1; $i<101; $i++) {
+////        \App\Jobs\SendWelcomeEmail::dispatch();
+////    }
+//
+////    \App\Jobs\ProcessPayment::dispatch()->onQueue('payments');
+//
+//
+//    return view('welcome');
+//});
+
 Route::get('/', function () {
-//    (new \App\Jobs\SendWelcomeEmail())->handle();
+//   $chain = [
+//       new \App\Jobs\PullRepo(),
+//       new \App\Jobs\RunTests(),
+//       new \App\Jobs\Deploy()
+//   ];
 
-    \App\Jobs\SendWelcomeEmail::dispatch()->delay(5);
-//    for($i=1; $i<101; $i++) {
-//        \App\Jobs\SendWelcomeEmail::dispatch();
-//    }
+   $batch = [
+       new \App\Jobs\PullRepo(),
+       new \App\Jobs\PullRepo(),
+       new \App\Jobs\PullRepo(),
+   ];
 
-//    \App\Jobs\ProcessPayment::dispatch()->onQueue('payments');
+//   \Illuminate\Support\Facades\Bus::chain($chain)->dispatch();
+    \Illuminate\Support\Facades\Bus::batch($batch)
+//        ->allowFailures()
+        ->dispatch();
 
-
-    return view('welcome');
+   return view('welcome');
 });
