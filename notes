@@ -47,3 +47,13 @@ the job.
 at which the job was generated, not when it was picked up by the worker.
 
 * we can use the ShouldBeEncypted interface to get laravel to encrypt the pay load of the job
+
+* in the real world workers can crash or stop for whatever reason. we can user supervisor to monitor and keep the worker alive at all
+times. It can be easily used in forge. We can get forge to restart queue when deploying by adding the code to the Deploy Script command in
+forge.
+
+* we can use the sudo supervisorctl stop worker-xxx:* command to gracefully stop all jobs before the start command is subsequently ran. this means
+that any db changes that ar emade as a result of teh deployment won't cause any failures on the jobs which were already present when the
+db changes kicked in. You can get the worker names from forge support. Using stop and start commands rather than the restart can mean that
+any jobs currently running can slow down deployment. use the restart command if you are sure there are no changes to the db which will cause
+any current jobs to fail.
