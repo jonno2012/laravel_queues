@@ -32,3 +32,8 @@ allowFailures() method
 
 * a race condition is where two processes try to make changes to the same resource and the same time. We can use Lock functions
 of laravel to lock the logic inside the closure
+
+* WithoutOverlapping will release jobs back or they will fail if they exceed the max amount. jobs will be placed back in queue even if there
+are multiple instances of the same job in the queue whereupon they will then be executed sequentially.
+* To ensure that there is only ever one isntance of the same job in the queue we can implement the ShouldBeUnique on the class
+*ShouldBeUniqueUntilProcessing interface can prevent dispatching until the job has started processing.

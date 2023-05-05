@@ -8,12 +8,13 @@ use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\Middleware\ThrottlesExceptions;
 use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 
-class Deploy implements ShouldQueue
+class Deploy implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Batchable;
 
@@ -64,9 +65,27 @@ class Deploy implements ShouldQueue
 
     public function middleware()
     {
+//        return [
+//            // will release the job back to the queue after 10 seconds if there is another instance of the job in progress
+//            new WithoutOverlapping('deployments', 10)
+//        ];
+
         return [
-            // will release the job back to the queue after 10 seconds if there is another instance of the job in progress
-            new WithoutOverlapping('deployments', 10)
+            // acts as circuit breaker if jobs are failing too often. can be used to, for example, stop afailed api calls
+            // stopping our system from working.
+            new ThrottlesExceptions()
         ];
     }
+
+//    public function uniqueId() // a custom key name for the unique job key in the db. key defaults to class name
+//    {
+//        return 'deployments';
+//    }
+//
+//    public function uniqueFor() // if ShouldBeUnique is implemented and for some reason a job gets stuck, it will
+//        // prevent any further instances of the same job running. here we can tell it to remove lock after a given time period
+//        // to prevent any issues with the job from stopping any further instances from running.
+//    {
+//        return 60;
+//    }
 }
