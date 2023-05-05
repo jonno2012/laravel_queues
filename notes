@@ -29,3 +29,6 @@ to count them separately by using the $maxExceptions prop.
 
 * if a batch job is failed the rest of the jobs in the batch will be cancelled. to stop this behaviour we can use the
 allowFailures() method
+
+* a race condition is where two processes try to make changes to the same resource and the same time. We can use Lock functions
+of laravel to lock the logic inside the closure

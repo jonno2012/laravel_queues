@@ -1,0 +1,7 @@
+[2023-05-05 12:32:05] local.ERROR: Class "Redis" not found {"exception":"[object] (Error(code: 0): Class \"Redis\" not found at C:\\Users\\jonat\\OneDrive\\Documents\\repos\\laravel_queues\\vendor\\laravel\\framework\\src\\Illuminate\\Redis\\Connectors\\PhpRedisConnector.php:81)
+composer require predis/predis
+'client' => env('REDIS_CLIENT', 'phpredis') > 'client' => env('REDIS_CLIENT', 'predis')
+REDIS_PASSWORD=secret_redis
+REDIS_HOST=127.0.0.1
+DB_HOST=mysql (to start queue)
+DB_HOST=127.0.0.1 (to run in browser)

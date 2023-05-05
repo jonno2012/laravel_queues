@@ -93,3 +93,10 @@ Route::get('/workflows2', function() {
 
     return view('welcome');
 });
+
+Route::get('/redistest', function() {
+    (new \App\Jobs\Deploy())::dispatch();
+
+//    \Cache::store('redis')->put('Laradock', 'Awesome', 10);
+    return view('welcome');
+});
