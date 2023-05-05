@@ -100,3 +100,17 @@ Route::get('/redistest', function() {
 //    \Cache::store('redis')->put('Laradock', 'Awesome', 10);
     return view('welcome');
 });
+
+
+// uses the transaction closure to ensure job is dispatched only after a db action has completed.
+// if transaction is rolled back the job will not be dispatched. this can be configured globally in the queue.php config by
+// using the after_commit prop to the connection which is being used. this can prevent a lot of confusing bugs.
+Route::get('/', function () {
+    \Illuminate\Support\Facades\DB::transaction(function () {
+        $user = \App\Models\User::create(['name' => 'sdfsdf']);
+
+        \App\Jobs\SendWelcomeEmail::dispatch($user)->afterCommit();
+    });
+
+    return view('welcome');
+});

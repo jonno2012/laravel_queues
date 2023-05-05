@@ -37,3 +37,13 @@ of laravel to lock the logic inside the closure
 are multiple instances of the same job in the queue whereupon they will then be executed sequentially.
 * To ensure that there is only ever one isntance of the same job in the queue we can implement the ShouldBeUnique on the class
 *ShouldBeUniqueUntilProcessing interface can prevent dispatching until the job has started processing.
+
+* the more dependencies we pass to the job the more overhead will be created. this can have implications on high volume
+applications. the deps have to be serialized and deserialized. it can consume a lot of resources. we can use app()->make('deployer')
+to inject dependencies irectly into the job handler without it having to be serialized etc when it is passed via the constructor of
+the job.
+
+* we can pass a dependency directly to the constructor of the job to make sure the job gets the latest state of the dep at the time
+at which the job was generated, not when it was picked up by the worker.
+
+* we can use the ShouldBeEncypted interface to get laravel to encrypt the pay load of the job
