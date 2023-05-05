@@ -14,8 +14,9 @@ class SendWelcomeEmail implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
 //    public $timeout = 1;
-//        public $tries = 3;
-//    public $backoff = 2;
+        public $tries = 3;
+//    public $backoff = [2, 10]; // will try 2 secs after first then 10 after second etc
+//    public $maxExceptions = 5;
     /**
      * Create a new job instance.
      */
@@ -30,11 +31,16 @@ class SendWelcomeEmail implements ShouldQueue
     public function handle(): void
     {
         sleep(3);
-        info('Job Finished!');
+        $this->release(2); // pushes job back to the queue to be retried after 2 secs. this will override the backoff value if set.
     }
 
 //    public function retryUntil()
 //    {
 //        return now()->addMinute();
 //    }
+
+    public function failed(\Exception $e)
+    {
+        info($e->getMessage());
+    }
 }

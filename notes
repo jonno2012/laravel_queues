@@ -14,3 +14,10 @@ priority and specific job types can be assigned to a specific queue:
 - $timeout can be used to ensure jobs don't hang if, for wxample, a third party api is unresponsive
 - use retryUntil for a time based retry. it will retry repeatedly until time expires.
 - $backoff = 2 - waits for 2 secs between each retry
+
+* if a job exhausts all if it's retries laravel stores the failed job in the db. we can grab the uuid and manually retry using pph artisan queue:retry {uuid}
+* using the return $this->release() in handle will release job back to the queue to be retried if, for example, a api call has hit a rate limit
+the number of $tries will determine how many release() retries are allowed.
+* laravel counts an attempt as a retry whether the job was retried as a result of a release() or an exception. we can tell laravel
+to count them separately by using the $maxExceptions prop.
+* the failed() ethod is run when a job failed.

@@ -18,5 +18,10 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+
+        Company::factory()->count(1000)->create();
+        Company::all()->each(function(Company $company) {
+            User::factory()->count(50)->create(['company_id' => $company->id]);
+        });
     }
 }
