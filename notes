@@ -57,3 +57,15 @@ that any db changes that ar emade as a result of teh deployment won't cause any 
 db changes kicked in. You can get the worker names from forge support. Using stop and start commands rather than the restart can mean that
 any jobs currently running can slow down deployment. use the restart command if you are sure there are no changes to the db which will cause
 any current jobs to fail.
+
+* we can scale workers by adding more workers to the same server by using supervisor to start more workers when specific programmes start
+Also it can start new workers on a cron based schedule.
+
+* we can start jobs in supervisor and use the --stop-when-empty queue flag to tell the workers to stop when they are empty. we can also
+use the --max-time=3600 to stop them after a specific amount of time.
+
+Horizon
+--------
+in more complex scenarios you may need to scale workers handling specific queues. if you are using the redis queue driver
+ypu can use horizon can be used for that. It gives more granular control over more complex queueing needs and should be considered for
+complex queue handling.
