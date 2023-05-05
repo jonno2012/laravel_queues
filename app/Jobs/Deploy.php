@@ -18,6 +18,23 @@ class Deploy implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Batchable;
 
+//    public $connection = 'redis';
+//    public $queue = 'notifications';
+//    public int $backoff = 30;
+//    public int $timeout = 60;
+//    public int $tries = 3;
+//    public $delay = 300;
+//    public $afterCommit = true;
+//    public bool $shouldBeEncrypted = true;
+
+// a job can be configured to be unique
+public $uniqueId = 'products'; // can also be done using the uniqueId() method.
+    public $uniqueFor = 10; // defines no of secs unique lock should be in place before it gets released.
+
+    public bool $deleteWhenMissingModels = true; // when serializedModels trait is added, a reference to the serialized
+    // model is passed to the job. this mean that if the model can't be found in the job, the job will fail immediately but there
+    // will be no exception and the failed job will not be stored in the failed job table. probably should be used.
+
     /**
      * Create a new job instance.
      */
@@ -26,6 +43,10 @@ class Deploy implements ShouldQueue, ShouldBeUnique
         //
     }
 
+    public function retryUntil()
+    {
+        return now()->addDay();
+    }
     /**
      * Execute the job.
      */

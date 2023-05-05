@@ -38,7 +38,7 @@ return [
             'driver' => 'database',
             'table' => 'jobs',
             'queue' => 'default',
-            'retry_after' => 90,
+            'retry_after' => 90, // tihs MUST be greater than any timeout values you have set on jobs or workers.
             'after_commit' => false,
         ],
 
@@ -67,7 +67,8 @@ return [
             'connection' => 'default',
             'queue' => env('REDIS_QUEUE', 'default'),
             'retry_after' => 90,
-            'block_for' => null,
+            'block_for' => null, // will keep redis or beanstalkd connection open and wait for jobs to be available for a set number of seconds
+            // laravel will keep connection open and pull when a job is available.
             'after_commit' => false,
         ],
 
